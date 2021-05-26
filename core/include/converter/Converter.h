@@ -1,10 +1,18 @@
-/** Created by D.Kabzhan, 30.04.2021 */
+/** Created by D.Kabzhan, 25.05.2021 */
 #pragma once
 #include "algorithm/AccurateMultiplier.h"
 #include "converter/ConvertableParser.h"
 #include "algorithm/DirectedWeightedGraph.h"
 #include <csv.h>
 #include <functional>
+inline std::unordered_multiset<std::string>
+createSet(Product const& product){
+    std::unordered_multiset<std::string> result;
+    for(auto& quantity: product){
+        result.insert(quantity.getName());
+    }
+    return result;
+}
 class AbstractConverter{
 public:
 
@@ -53,7 +61,6 @@ public:
     /** See the AbstractConverter::convertQuantities description*/
     virtual std::optional<mpf_class>
         convertQuantities(Quantity const& from, Quantity const& to)const override;
-
     /** See the AbstractConverter::createParser description*/
     virtual ConvertableExpressionParser createParser() const override {
         return ConvertableExpressionParser(ruleGraph_.getVertexMap());
@@ -69,6 +76,17 @@ public:
     RuleGraph::VertexMap const& getExistingQuantities()const {
         return ruleGraph_.getVertexMap();
     }
-private:
+protected:
     RuleGraph ruleGraph_;
+};
+class FastConverter: public Converter{
+
+public:
+   FastConverter(std::string const& filePath, size_t significantDigits) noexcept(false):
+        Converter(filePath, significantDigits)
+    {
+    }
+   virtual std::optional<mpf_class>
+        convertProducts(Product const& left, Product& right)const override;
+
 };

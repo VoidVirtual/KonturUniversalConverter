@@ -1,13 +1,14 @@
-/** Created by D.Kabzhan, 30.04.2021 */
+/** Created by D.Kabzhan, 25.05.2021 */
 #pragma once
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/breadth_first_search.hpp>
+#include <functional>
 /**
  *  Some conventionally weird solutions are dictated by Boost Graph Library design.
  *  They are marked as (<!!!>).
  *  Detals: https://www.boost.org/doc/libs/1_59_0/libs/graph/doc/faq.html
 */
-class TargetReachedException : public std::exception {}; //(<!!!>)
+
 
 
 template<class G>
@@ -25,6 +26,20 @@ template<class G>
 
 template<class V, class G>
     using _VertexMap = std::unordered_map<V, _Vertex<G> >;
+template<class V, class G>
+    using _ValueMap = std::unordered_map<_Vertex<G>, V >;
+
+template<class G>
+class TargetReachedException : public std::exception {//(<!!!>)
+    public: 
+        TargetReachedException(_Vertex<G> const& v):
+                                vertex_(v)
+        {
+        }
+        _Vertex<G> getVertex(){return vertex_;};
+    private:
+        _Vertex<G> vertex_;
+}; 
 
 /**
  * An adapter for breadth_first_search function
@@ -35,13 +50,19 @@ template<class V, class G>
 template<class G>
     class PredecessorsRecorder : public boost::default_bfs_visitor {
     public:
-        PredecessorsRecorder(_PredecessorsMap<G>& predessorsMap, _Vertex<G> const& _target) :
-            predcessorsMap_(predessorsMap), target(_target){
-        
+        PredecessorsRecorder(_PredecessorsMap<G>& predessorsMap,
+                                                   std::function<bool(_Vertex<G> const&)> const& searchCondition) :
+                         predcessorsMap_(predessorsMap), searchCondition_(searchCondition){
+        }
+         /**Constructor with default search condition */
+         PredecessorsRecorder(_PredecessorsMap<G>& predessorsMap,
+                                                   _Vertex<G> const& target) :
+                         predcessorsMap_(predessorsMap) {
+             searchCondition_ = [&target](_Vertex<G> const& v){return v == target;}; 
         }
         void examine_vertex(_Vertex<G> const& v, G const&) {
-            if (v == target) {
-                throw TargetReachedException(); //<!!!>
+            if (searchCondition_(v)) {
+                throw TargetReachedException<G>(v); //<!!!>
             }
         }
         void examine_edge(_Edge<G> const& e, G const& graph) {
@@ -52,4 +73,5 @@ template<class G>
         }
         _PredecessorsMap<G>& predcessorsMap_;
         _Vertex<G> target;
+        std::function<bool(_Vertex<G>)> searchCondition_;
     };

@@ -1,6 +1,7 @@
 #include "converter/Converter.h"
+#include <unordered_set>
 std::optional<mpf_class>
-AbstractConverter::convertProducts(Product const& left, Product& right)const {
+AbstractConverter::convertProducts(Product const& left, Product& right)const { 
     if (left.size() != right.size()) {
         return std::nullopt; // bijetction from left to right is required
     }
@@ -24,6 +25,26 @@ AbstractConverter::convertProducts(Product const& left, Product& right)const {
         }
     }
     return result;
+}
+std::optional<mpf_class>
+FastConverter::convertProducts(Product const& left, Product& right)const { 
+    if (left.size() != right.size()) {
+        return std::nullopt; // bijetction from left to right is required
+    }
+    mpf_class result = multiplier_.getOne();
+    auto rightSet = createSet(right);
+    auto searchCondition = [&rightSet](std::string const& name){
+        auto it = rightSet.find(name);
+        if(it==rightSet.end()){
+            return false;
+        }
+        rightSet.erase(it);
+        return true;
+    };
+    for(auto leftQuantity: left){
+        auto coef = ruleGraph_.getBfsDistanceIf(leftQuantity.getName(), searchCondition, multiplier_);
+        result = multiplier_(result,coef.value());
+    }
 }
 Converter::Converter(std::string const& filePath, size_t significantDigits)noexcept(false):
                                 AbstractConverter(significantDigits){

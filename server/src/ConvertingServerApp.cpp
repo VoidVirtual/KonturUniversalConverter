@@ -2,7 +2,7 @@
 #include <thread>
 int ConvertingServerApp::main(std::vector<std::string> const&){
     try {
-        auto converter = std::make_shared<Converter>(rulesFilePath_, significantDigits_);
+        auto converter = std::make_shared<FastConverter>(rulesFilePath_, significantDigits_);
         auto conversionParams = ConvertingHandlerParams{converter, significantDigits_};
         auto handlerFactory = new ConvertingHandlerFactory(conversionParams);
         auto serverParams = new HTTPServerParams;

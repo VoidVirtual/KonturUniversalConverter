@@ -1,17 +1,18 @@
 #include <catch2/catch.hpp>
+#include <gmpxx.h>
 #include "algorithm/DirectedWeightedGraph.h"
-class Adder: public IAlgebraicOperator<int>{
+class Adder: public IAlgebraicOperator<mpf_class>{
 public:
-    virtual int getNeutralElement()const{
+    virtual mpf_class getNeutralElement()const{
         return 0;
     }
-    virtual int operator()(const int& x, const int& y)const{
+    virtual mpf_class operator()(const mpf_class& x, const mpf_class& y)const{
         return x+y;
     }
 };
 TEST_CASE("Add edge", "[DirectedWeightedGraph]")
 {
-    DirectedWeightedGraph<std::string, int> graph;
+    DirectedWeightedGraph<std::string, mpf_class> graph;
 
     SECTION("Multiple edges between vertices")
     {
@@ -29,7 +30,7 @@ TEST_CASE("Add edge", "[DirectedWeightedGraph]")
 }
 TEST_CASE("BFS", "[DirectedWeightedGraph]")
 {
-    DirectedWeightedGraph<std::string, int> graph;
+    DirectedWeightedGraph<std::string, mpf_class> graph;
     SECTION("Loop")
     {
          graph.addEdge("A","B", 1);
