@@ -45,6 +45,7 @@ FastConverter::convertProducts(Product const& left, Product& right)const {
         auto coef = ruleGraph_.getBfsDistanceIf(leftQuantity.getName(), searchCondition, multiplier_);
         result = multiplier_(result,coef.value());
     }
+    return result;
 }
 Converter::Converter(std::string const& filePath, size_t significantDigits)noexcept(false):
                                 AbstractConverter(significantDigits){
