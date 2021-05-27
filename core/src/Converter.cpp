@@ -33,16 +33,19 @@ FastConverter::convertProducts(Product const& left, Product& right)const {
     }
     mpf_class result = multiplier_.getOne();
     auto rightSet = createSet(right);
-    auto searchCondition = [&rightSet](std::string const& name){
-        auto it = rightSet.find(name);
+    auto searchCondition = [&rightSet](std::string const& name){ 
+        auto it = rightSet.find(name); //searching any quantity from right product that is reachable by bfs.  
         if(it==rightSet.end()){
             return false;
         }
-        rightSet.erase(it);
+        rightSet.erase(it); // injetction from left to right is required
         return true;
     };
     for(auto leftQuantity: left){
         auto coef = ruleGraph_.getBfsDistanceIf(leftQuantity.getName(), searchCondition, multiplier_);
+        if(coef == std::nullopt){
+            return std::nullopt;
+        }
         result = multiplier_(result,coef.value());
     }
     return result;

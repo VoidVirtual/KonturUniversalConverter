@@ -5,14 +5,6 @@
 #include "algorithm/DirectedWeightedGraph.h"
 #include <csv.h>
 #include <functional>
-inline std::unordered_multiset<std::string>
-createSet(Product const& product){
-    std::unordered_multiset<std::string> result;
-    for(auto& quantity: product){
-        result.insert(quantity.getName());
-    }
-    return result;
-}
 class AbstractConverter{
 public:
 
@@ -71,7 +63,6 @@ public:
      * Or unknown std::exception child by mpf_set_str() function, if the string isn't numeric
     */
     void addRule(std::string const& from, std::string const& to, std::string const& valueStr)noexcept(false);
-
     /** Quantity map getter*/
     RuleGraph::VertexMap const& getExistingQuantities()const {
         return ruleGraph_.getVertexMap();
@@ -79,6 +70,7 @@ public:
 protected:
     RuleGraph ruleGraph_;
 };
+/**Converter with optimized convertProducts method*/
 class FastConverter: public Converter{
 
 public:
@@ -90,7 +82,16 @@ public:
         Converter(filePath, significantDigits)
     {
     }
+    /**O(n) average complexity is guarantied where n is the size of products*/
    virtual std::optional<mpf_class>
         convertProducts(Product const& left, Product& right)const override;
-
+private:
+    static std::unordered_multiset<std::string>
+        createSet(Product const& product){
+            std::unordered_multiset<std::string> result;
+            for(auto& quantity: product){
+                result.insert(quantity.getName());
+            }
+            return result;
+        } 
 };

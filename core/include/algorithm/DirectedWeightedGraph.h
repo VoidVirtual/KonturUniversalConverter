@@ -23,7 +23,7 @@ template<class V, class W>
         using ValueMap = _ValueMap<V,DirectedWeightedGraph>;
     public:
         /** Gets the distance between source vertex and the nearest (in terms of the edges number)
-          * vertex, which has a value that satisfies "valueSearchcndition"
+          * vertex, which has a value that satisfies "valueSearchCondition"
          *  std::nullopt is returned if the graph does not contain such vertices.
         */
         std::optional<W> 
