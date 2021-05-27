@@ -82,6 +82,10 @@ protected:
 class FastConverter: public Converter{
 
 public:
+   FastConverter(size_t significantDigits):
+            Converter(significantDigits)
+    {
+    }
    FastConverter(std::string const& filePath, size_t significantDigits) noexcept(false):
         Converter(filePath, significantDigits)
     {

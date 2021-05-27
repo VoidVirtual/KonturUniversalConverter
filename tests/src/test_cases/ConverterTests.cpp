@@ -3,7 +3,7 @@
 #include "exception/Exception.h"
 TEST_CASE("Add rules","[Converter]")
 {
-    Converter converter(15);
+    FastConverter converter(15);
     SECTION("Not a number")
     {
         try{
@@ -24,7 +24,7 @@ TEST_CASE("Add rules","[Converter]")
 }
 TEST_CASE("Convert quantities", "[Converter]")
 {
-    Converter converter(15);
+    FastConverter converter(15);
     converter.addRule("A","B","1.0");
     converter.addRule("B","C","1.0");
     converter.addRule("D","E","1.0");
@@ -52,7 +52,7 @@ TEST_CASE("Convert quantities", "[Converter]")
 }
 TEST_CASE("Convert products", "[Converter]")
 {
-    Converter converter(15);
+    FastConverter converter(15);
     converter.addRule("A1","B1","1.0");
     converter.addRule("A2","B2","2.0");
     converter.addRule("A3","B3","3.0");
