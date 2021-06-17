@@ -1,10 +1,13 @@
 /** Created by D.Kabzhan, 25.05.2021 */
 #pragma once
+#pragma warning(push,0)
+#include <csv.h>
+#include <functional>
+#pragma warning(pop)
 #include "algorithm/AccurateMultiplier.h"
 #include "converter/ConvertableParser.h"
 #include "algorithm/DirectedWeightedGraph.h"
-#include <csv.h>
-#include <functional>
+
 class AbstractConverter{
 public:
 

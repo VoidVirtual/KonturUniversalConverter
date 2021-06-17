@@ -1,18 +1,20 @@
 #pragma once
+#pragma warning(push,0)
 #include <nlohmann/json.hpp>
 #include <list>
 #include <initializer_list>
 #include <iostream>
 #include <boost/algorithm/string.hpp>
 #include <boost/tokenizer.hpp>
+#include <gmpxx.h>
+#pragma warning(pop)
 #include "algorithm/DirectedWeightedGraph.h"
 #include "exception/Exception.h"
-#include <gmpxx.h>
 /** Forward declaration*/
 class Quantity;
 class Product;
 class Fraction;
-class ProductEquality;
+struct ProductEquality;
 using json = nlohmann::json;
 using RuleGraph = DirectedWeightedGraph<std::string, mpf_class>;
 

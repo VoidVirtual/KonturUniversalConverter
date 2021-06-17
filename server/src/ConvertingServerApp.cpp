@@ -6,11 +6,12 @@ int ConvertingServerApp::main(std::vector<std::string> const&){
         auto conversionParams = ConvertingHandlerParams{converter, significantDigits_};
         auto handlerFactory = new ConvertingHandlerFactory(conversionParams);
         auto serverParams = new HTTPServerParams;
-        //serverParams->setMaxThreads(std::thread::hardware_concurency());
+        serverParams->setMaxThreads(threadNum_);
         HTTPServer s(handlerFactory, ServerSocket(port_), serverParams);
         s.start();
         waitForTerminationRequest();
         s.stop();
+        delete handlerFactory;
         return Application::EXIT_OK;
     }
     catch (std::exception& ex) {
@@ -23,19 +24,31 @@ void ConvertingServerApp::defineOptions(OptionSet& options) {
     options.addOption(
         Option("rules", "r", "sets the path to conversion rules file")
         .required(true)
-        .argument("File Path", true)
-        .callback(OptionCallback<ConvertingServerApp>(this, &ConvertingServerApp::handleRulesFile))
+        .argument("rules", true)
+        .callback(OptionCallback<ConvertingServerApp>(this, &ConvertingServerApp::handleSetOption))
     );
     options.addOption(
          Option("port", "p", "sets the server's port")
         .required(false)
         .argument("port", true)
-        .callback(OptionCallback<ConvertingServerApp>(this, &ConvertingServerApp::handleSetPort))
+        .callback(OptionCallback<ConvertingServerApp>(this, &ConvertingServerApp::handleSetOption))
+    );
+    options.addOption(
+        Option("threads", "t", "sets the number of threads")
+        .required(false)
+        .argument("threads", true)
+        .callback(OptionCallback<ConvertingServerApp>(this, &ConvertingServerApp::handleSetOption))
     );
 }
-void ConvertingServerApp::handleRulesFile(std::string const&, std::string const& filePath) {
-    rulesFilePath_ = filePath;
+void ConvertingServerApp::handleSetOption(std::string const& optionName, std::string const& value) {
+    if (optionName == "rules") {
+        rulesFilePath_ = value;
+    }
+    else if (optionName == "port") {
+        port_ = std::stoi(value);
+    }
+    else if (optionName == "threads") {
+        threadNum_ = std::stoi(value);
+    }
 }
-void ConvertingServerApp::handleSetPort(std::string const&, std::string const& value) {
-    port_ = std::stoi(value);
-}
+

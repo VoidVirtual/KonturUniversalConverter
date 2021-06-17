@@ -36,11 +36,11 @@ public:
 protected:
     int main(std::vector<std::string> const&);
     void defineOptions(OptionSet& options);
-    void handleRulesFile(std::string const&, std::string const& value);
-    void handleSetPort(std::string const&, std::string const& value);
+    void handleSetOption(std::string const& optionName, std::string const& value);
 private:
     std::string rulesFilePath_;
     uint16_t port_ = 80;
+    uint16_t threadNum_ = std::thread::hardware_concurrency();
 private:
     inline static const uint8_t significantDigits_ = 15;
 };

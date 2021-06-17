@@ -1,0 +1,11 @@
+{
+  "path": "/converter",
+  "expression": {
+   	"from": "m/s",
+   	"to": "km/hr"
+  },
+  "result": {
+        "status": 200,
+        "body": 3.6
+  }
+}	

@@ -1,11 +1,13 @@
 /** Created by D.Kabzhan, 25.05.2021 */
 #pragma once
+#pragma warning(push,0)
 #include <vector>
 #include <iostream>
 #include <optional>
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/breadth_first_search.hpp>
 #include <boost/core/demangle.hpp>
+#pragma warning(pop)
 #include "algorithm/BinaryOperator.h"
 #include "algorithm/PredecessorsRecorder.h"
 /** A wrapper class over boost::graph::adjacency_list
@@ -76,7 +78,11 @@ template<class V, class W>
             try {
                 boost::breadth_first_search(*this, sourceVertex, boost::visitor(recorder));
             }
+<<<<<<< HEAD
             catch (TargetReachedException<DirectedWeightedGraph>& target) {
+=======
+            catch (TargetReached<DirectedWeightedGraph>& target) {
+>>>>>>> main
                 W distance = distanceCalculator.getNeutralElement();
                 auto currentVertex = target.getVertex();
                 while (currentVertex != sourceVertex) {
