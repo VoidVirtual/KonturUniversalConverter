@@ -5,6 +5,7 @@ include("Utilities")
 
 add_executable(${PROJECT_NAME})
 setup_udecoder_target(${PROJECT_NAME})
+
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
         core

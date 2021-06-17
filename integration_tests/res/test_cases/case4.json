@@ -1,0 +1,11 @@
+{
+  "path": "/nonsense",
+  "expression": {
+   	"from": "m/s",
+   	"to": "km/hr"
+  },
+  "result": {
+        "status": 501,
+        "result": ""
+  }
+}

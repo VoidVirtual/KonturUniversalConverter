@@ -1,6 +1,7 @@
 #include "converter/Converter.h"
+#include <unordered_set>
 std::optional<mpf_class>
-AbstractConverter::convertProducts(Product const& left, Product& right)const {
+AbstractConverter::convertProducts(Product const& left, Product& right)const { 
     if (left.size() != right.size()) {
         return std::nullopt; // bijetction from left to right is required
     }
@@ -22,6 +23,30 @@ AbstractConverter::convertProducts(Product const& left, Product& right)const {
         if (!wasConverted) {
             return std::nullopt; // surjetction from left to right is required
         }
+    }
+    return result;
+}
+std::optional<mpf_class>
+FastConverter::convertProducts(Product const& left, Product& right)const { 
+    if (left.size() != right.size()) {
+        return std::nullopt; // bijetction from left to right is required
+    }
+    mpf_class result = multiplier_.getOne();
+    auto rightSet = createSet(right);
+    auto searchCondition = [&rightSet](std::string const& name){ 
+        auto it = rightSet.find(name); //searching any quantity from right product that is reachable by bfs.  
+        if(it==rightSet.end()){
+            return false;
+        }
+        rightSet.erase(it); // injetction from left to right is required
+        return true;
+    };
+    for(auto leftQuantity: left){
+        auto coef = ruleGraph_.getBfsDistanceIf(leftQuantity.getName(), searchCondition, multiplier_);
+        if(coef == std::nullopt){
+            return std::nullopt;
+        }
+        result = multiplier_(result,coef.value());
     }
     return result;
 }

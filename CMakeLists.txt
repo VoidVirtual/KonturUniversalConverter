@@ -1,5 +1,5 @@
 ﻿cmake_minimum_required(VERSION 3.19)
-project(universal_converter)
+project(KonturUniversalConverter)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
@@ -59,4 +59,5 @@ conan_cmake_run(
 )
 add_subdirectory("${CMAKE_SOURCE_DIR}/core")
 add_subdirectory("${CMAKE_SOURCE_DIR}/server")
-add_subdirectory("${CMAKE_SOURCE_DIR}/tests")
+add_subdirectory("${CMAKE_SOURCE_DIR}/unit_tests")
+

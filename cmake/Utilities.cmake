@@ -39,7 +39,7 @@ function(setup_udecoder_target TARGET)
     target_compile_features(${TARGET} PUBLIC cxx_std_17)
 
     get_project_files(PROJECT_FILES)
-    target_sources(${TARGET} PRIVATE ${PROJECT_FILES} "../core/include/exceptions/Exceptions.h")
+    target_sources(${TARGET} PRIVATE ${PROJECT_FILES} )
 
     target_include_directories(${TARGET}
         PUBLIC

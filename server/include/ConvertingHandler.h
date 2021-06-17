@@ -28,12 +28,11 @@ public:
     ConvertingRequestHandler(ConvertingHandlerParams const& params) :
         converter(params.converter) , resultSignificantDigits(params.significantDigits)
     {
-        std::cout<<"Converter handler created, significant digits: "<<resultSignificantDigits<<"\n";
     }
     virtual void handleRequest(HTTPServerRequest& req, HTTPServerResponse& resp);
 
     /** formats the conversion result according to resultSignificantDigits value */
-    std::string formatResult(mpf_class const& x) const;
+    std::string formatConversionResult(mpf_class const& x) const;
 
     /** formats the conversion result according to resultSignificantDigits value */
     std::string getContent(HTTPServerRequest& req) const;

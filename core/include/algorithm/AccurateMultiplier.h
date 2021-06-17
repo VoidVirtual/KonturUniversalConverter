@@ -1,6 +1,8 @@
 /** Created by D.Kabzhan, 30.04.2021 */
 #pragma once
+#pragma warning(push,0)
 #include <gmpxx.h>
+#pragma warning(pop)
 #include "BinaryOperator.h"
 class AccurateMultiplier: public IAlgebraicOperator<mpf_class>
 {
